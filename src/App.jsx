@@ -88,177 +88,169 @@ export default function StockAverageCalculator() {
     setChartData([]);
   };
 
- return (
-  <>
-    <Banner />
+  return (
+    <>
+      <Banner />
 
-    <div className="min-h-screen bg-[#f7f9ff] flex justify-center items-start py-10 px-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl p-8">
-        <h2 className="text-2xl font-semibold text-[#1e293b] mb-6">
-          Enter the details to calculate average share price
-        </h2>
+      <div className="min-h-screen bg-[#f7f9ff] flex justify-center items-start py-10 px-4">
+        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl p-8">
+          <h2 className="text-2xl font-semibold text-[#1e293b] mb-6">
+            Enter the details to calculate average share price
+          </h2>
 
-        <div className="md:flex gap-6">
-          {/* Input Section */}
-          <div className="md:w-3/5 space-y-6">
-            {purchases.map((purchase, index) => (
-              <div
-                key={index}
-                className="border border-gray-200 rounded-xl p-6 bg-white shadow-sm"
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-base font-semibold text-gray-700">
-                    {index === 0
-                      ? "First Purchase"
-                      : index === 1
-                      ? "Second Purchase"
-                      : `Purchase ${index + 1}`}
-                  </h3>
-                  {index >= 2 && (
-                    <button
-                      onClick={() => deletePurchase(index)}
-                      className="text-red-500 hover:text-red-700"
-                      title="Delete purchase"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  )}
-                </div>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="w-full md:w-1/2">
-                    <label className="block text-sm font-medium text-gray-500 mb-1">
-                      Buy Price
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-gray-400 text-sm">
-                        ₹
-                      </span>
+          <div className="grid grid-cols-1 md:grid-cols-[55%_45%] gap-6">
+            {/* Input Section */}
+            <div className="space-y-6">
+              {purchases.map((purchase, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-xl p-6 bg-white shadow-sm"
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-base font-semibold text-gray-700">
+                      {index === 0
+                        ? "First Purchase"
+                        : index === 1
+                        ? "Second Purchase"
+                        : `Purchase ${index + 1}`}
+                    </h3>
+                    {index >= 2 && (
+                      <button
+                        onClick={() => deletePurchase(index)}
+                        className="text-red-500 hover:text-red-700"
+                        title="Delete purchase"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="w-full md:w-1/2">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        Buy Price
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">
+                          ₹
+                        </span>
+                        <input
+                          type="number"
+                          value={purchase.price}
+                          onChange={(e) =>
+                            handleChange(index, "price", e.target.value)
+                          }
+                          placeholder="0"
+                          className="w-full border border-gray-300 text-sm rounded-md pl-7 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full md:w-1/2">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        Quantity
+                      </label>
                       <input
                         type="number"
-                        value={purchase.price}
+                        value={purchase.quantity}
                         onChange={(e) =>
-                          handleChange(index, "price", e.target.value)
+                          handleChange(index, "quantity", e.target.value)
                         }
                         placeholder="0"
-                        className="w-full border border-gray-300 text-sm rounded-md pl-7 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-300 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
-                  <div className="w-full md:w-1/2">
-                    <label className="block text-sm font-medium text-gray-500 mb-1">
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      value={purchase.quantity}
-                      onChange={(e) =>
-                        handleChange(index, "quantity", e.target.value)
-                      }
-                      placeholder="0"
-                      className="w-full border border-gray-300 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
                 </div>
-              </div>
-            ))}
-
-            <button
-              onClick={addPurchase}
-              className="text-blue-600 text-sm hover:underline"
-            >
-              + Add new purchase
-            </button>
-
-            {/* Action Buttons */}
-            <div className="pt-4 flex flex-wrap gap-4">
+              ))}
               <button
-                onClick={calculateAverage}
-                className="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded shadow-md hover:bg-blue-700"
+                onClick={addPurchase}
+                className="text-blue-600 text-sm hover:underline"
               >
-                Calculate Average
+                + Add new purchase
               </button>
-              <button
-                onClick={reset}
-                className="bg-white text-sm font-semibold border border-gray-300 px-6 py-2.5 rounded hover:bg-gray-100"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
 
-          {/* Result Summary */}
-          <div className="md:w-2/5 bg-[#f4f8ff] p-6 rounded-md mt-8 md:mt-0">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Share price
-            </h3>
-            <div className="text-sm text-gray-600 mb-1 flex justify-between">
-              <span>Total quantity</span>
-              <span>{results.totalQuantity}</span>
-            </div>
-            <div className="text-sm text-gray-600 mb-4 flex justify-between">
-              <span>Average price</span>
-              <span>{results.averagePrice}</span>
-            </div>
-            <hr className="mb-4 border-gray-300" />
-            <div className="flex justify-between text-lg font-bold text-gray-900">
-              <span>Total Amount</span>
-              <span>₹ {results.totalAmount}</span>
-            </div>
-
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  dataKey="amount"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
+              <div className="mt-4 flex gap-4 flex-wrap">
+                <button
+                  onClick={calculateAverage}
+                  className="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded shadow-md hover:bg-blue-700"
                 >
-                  {chartData.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={
-                        ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"][
-                          index % 5
-                        ]
-                      }
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+                  Calculate Average
+                </button>
+                <button
+                  onClick={reset}
+                  className="bg-white text-sm font-semibold border border-gray-300 px-6 py-2.5 rounded hover:bg-gray-100"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
 
-        {/* Line Chart */}
-       {chartData.length > 0 && (
-  <div className="mt-12 w-full">
-    <h3 className="text-xl font-semibold text-gray-800 mb-4">
-      Purchase Breakdown (Line Chart)
-    </h3>
-    <div className="bg-white rounded-xl shadow-md p-4">
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="Price" stroke="#3b82f6" />
-          <Line type="monotone" dataKey="Quantity" stroke="#10b981" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+            {/* Result Summary */}
+            <div className="bg-[#f4f8ff] p-6 rounded-md">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                Share price
+              </h3>
+              <div className="text-sm text-gray-600 mb-1 flex justify-between">
+                <span>Total quantity</span>
+                <span>{results.totalQuantity}</span>
+              </div>
+              <div className="text-sm text-gray-600 mb-4 flex justify-between">
+                <span>Average price</span>
+                <span>{results.averagePrice}</span>
+              </div>
+              <hr className="mb-4 border-gray-300" />
+              <div className="flex justify-between text-lg font-bold text-gray-900 mb-4">
+                <span>Total Amount</span>
+                <span>₹ {results.totalAmount}</span>
+              </div>
+              <div className="w-full h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      dataKey="amount"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={90}
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
+                    >
+                      {chartData.map((_, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"][index % 5]
+                          }
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          {/* Line Chart */}
+          {chartData.length > 0 && (
+  <div className="mt-12 w-full h-[350px]">
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Line type="monotone" dataKey="Price" stroke="#3b82f6" strokeWidth={2} />
+        <Line type="monotone" dataKey="Quantity" stroke="#10b981" strokeWidth={2} />
+      </LineChart>
+    </ResponsiveContainer>
   </div>
 )}
-      </div>
-    </div>
-  </>
-);
 
+        </div>
+      </div>
+    </>
+  );
 }
