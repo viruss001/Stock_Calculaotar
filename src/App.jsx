@@ -12,9 +12,8 @@ import {
   Cell,
   Legend,
 } from "recharts";
-
 import { Trash2 } from "lucide-react";
-import Banner from "./Banner"; // Optional
+import Banner from "./Banner"; // Optional, make sure this exists or remove
 
 export default function StockAverageCalculator() {
   const [purchases, setPurchases] = useState([
@@ -41,7 +40,7 @@ export default function StockAverageCalculator() {
   };
 
   const deletePurchase = (index) => {
-    if (index < 2) return; // Protect first two entries
+    if (index < 2) return;
     const updated = [...purchases];
     updated.splice(index, 1);
     setPurchases(updated);
@@ -71,7 +70,12 @@ export default function StockAverageCalculator() {
       ? (totalAmount / totalQuantity).toFixed(2)
       : 0;
 
-    setResults({ totalQuantity, totalAmount, averagePrice });
+    setResults({
+      totalQuantity,
+      totalAmount,
+      averagePrice,
+    });
+
     setChartData(computedData);
   };
 
@@ -87,6 +91,8 @@ export default function StockAverageCalculator() {
     });
     setChartData([]);
   };
+
+  const colors = ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"];
 
   return (
     <>
@@ -161,6 +167,7 @@ export default function StockAverageCalculator() {
                   </div>
                 </div>
               ))}
+
               <button
                 onClick={addPurchase}
                 className="text-blue-600 text-sm hover:underline"
@@ -184,7 +191,7 @@ export default function StockAverageCalculator() {
               </div>
             </div>
 
-            {/* Result Summary */}
+            {/* Result Summary and Pie Chart */}
             <div className="bg-[#f4f8ff] p-6 rounded-md">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 Share price
@@ -202,53 +209,75 @@ export default function StockAverageCalculator() {
                 <span>Total Amount</span>
                 <span>₹ {results.totalAmount}</span>
               </div>
-              <div className="w-full h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      dataKey="amount"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={90}
-                      label={({ name, percent }) =>
-                        `${name} ${(percent * 100).toFixed(0)}%`
-                      }
-                    >
-                      {chartData.map((_, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={
-                            ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"][index % 5]
-                          }
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend layout="horizontal" verticalAlign="bottom" align="center" />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+
+              <div className="w-full h-80">
+  <ResponsiveContainer width="100%" height="100%">
+    <PieChart>
+      <Pie
+        data={chartData}
+        dataKey="amount"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        // label={({ name, percent }) =>
+        //   `${name} (${(percent * 100).toFixed(1)}%)`
+        // }
+        labelLine={false}
+        isAnimationActive={false}
+      >
+        {chartData.map((_, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#3b82f6"][index % 5]}
+          />
+        ))}
+      </Pie>
+      <Tooltip
+        formatter={(value) => `₹ ${Number(value).toLocaleString()}`}
+      />
+      <Legend
+        iconType="circle"
+        verticalAlign="bottom"
+        align="center"
+        wrapperStyle={{
+          fontSize: "13px",
+          lineHeight: "1.4em",
+          marginTop: "10px",
+        }}
+      />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
             </div>
           </div>
 
           {/* Line Chart */}
           {chartData.length > 0 && (
-  <div className="mt-12 w-full h-[350px]">
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={chartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="Price" stroke="#3b82f6" strokeWidth={2} />
-        <Line type="monotone" dataKey="Quantity" stroke="#10b981" strokeWidth={2} />
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
-)}
-
+            <div className="mt-12 w-full h-[350px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="Price"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="Quantity"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
       </div>
     </>
