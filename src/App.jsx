@@ -202,7 +202,7 @@ export default function StockAverageCalculator() {
               </div>
               <div className="text-sm text-gray-600 mb-4 flex justify-between">
                 <span>Average price</span>
-                <span>{results.averagePrice}</span>
+                <span>{Math.round(results.averagePrice)}</span>
               </div>
               <hr className="mb-4 border-gray-300" />
               <div className="flex justify-between text-lg font-bold text-gray-900 mb-4">
